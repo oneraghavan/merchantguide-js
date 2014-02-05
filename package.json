@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "underscore":"1.5.2"
+    "underscore":"1.5.2",
+    "jasmine-node":"1.13.1"
   }
 }

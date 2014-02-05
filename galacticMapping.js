@@ -1,28 +1,31 @@
-var romanMapping = require("romanMapping.js")
+var romanMapping = require("./romanMapping.js");
+var _ = require('underscore')
+
 function GalacticMapping(){
-	var currentMapping = {}
+	this.currentMapping = {}
 }
 
-GalacticMapping.prototype.getMappingLines = function(mappingLines){
+GalacticMapping.prototype.getMappingFromLines = function(mappingLines){
+	var that = this;
 	_.each(mappingLines,function(mappingLine){
-		this.getMappingLine(mappingLine);	
+		that.getMappingFromLine(mappingLine);
 	})
 }
 
-GalacticMapping.prototype.getMappingLines = function(mappingLines){
-	var mappingLineSplit = mappingLine.split(' ')
-	var mapkey = mappingLineSplit[0]
+GalacticMapping.prototype.getMappingFromLine = function(mappingLines){
+	var mappingLineSplit = mappingLines.split(' ')
+	var mapKey = mappingLineSplit[0]
     var mapValue = romanMapping[mappingLineSplit[2]]
-    self.setCurrentMapping(mapKey, mapValue)
+    this.setCurrentMapping(mapKey, mapValue)
 }
 
 GalacticMapping.prototype.setCurrentMapping = function(mapKey, mapValue){
-	this.currentMapping[mapkey] = mapValue;
+	this.currentMapping[mapKey] = mapValue;
 }
 
-GalacticMapping.prototype.getCurrentMapping = function(mapKey){
-    if _.has(self.currentMapping, mapkey){
-        return self.currentMapping[key]
+GalacticMapping.prototype.getCurrentMappingValueIfexist = function(mapKey){
+    if (_.has(this.currentMapping, mapKey)){
+        return this.currentMapping[mapKey]
     }else{
         return -1
     }

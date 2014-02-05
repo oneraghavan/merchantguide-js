@@ -1,4 +1,4 @@
-exports.romanMapping = {
+module.exports = {
         'I': 1,
         'V': 5,
         'X': 10,
