@@ -1,12 +1,14 @@
+var _ = require('underscore')
 function MetalValues(galacticConversion){
 	this.metalUnitPrice = {}
     this.gConversion = galacticConversion
 }
 
 MetalValues.prototype.getMetalUnitpricefromLines = function(priceLines){
-	var _ = require('underscore')
+
+    var that = this;
 	_.each(priceLines,function(priceLine){
-		this.getMetalUnitpricefromLine(priceLine);
+		that.getMetalUnitpricefromLine(priceLine);
 	});
 }
 
@@ -16,19 +18,19 @@ MetalValues.prototype.getMetalUnitpricefromLine = function(priceLine){
         metal = metalQuantityArray[0]
         quatity = metalQuantityArray[1]
         totalCredit = this.getTotalCreditsforgivenMetal(partLine[1])
-        this.metalUnitPrice[metal] = float(totalCredit)/quatity
+        this.metalUnitPrice[metal] = parseFloat((totalCredit)/quatity)
 }
 
 MetalValues.prototype.getMetalandQuatityValue = function(metalAmount){
         splitParts = metalAmount.split(' ')
         metal = _.last(splitParts);
         quantityString = _.without(splitParts,metal) 
-        quantity = this.gConversion.getValuesfromgalactic(quantityString)
+        quantity = this.gConversion.getValuesFromGalactic(quantityString)
         return [metal , quantity]
 }
 
 MetalValues.prototype.getTotalCreditsforgivenMetal = function(creditPart){
-	return int(creditPart.split(' ')[0])
+	return parseInt(creditPart.split(' ')[0])
 }
 
 MetalValues.prototype.getMetalUnitPrices =function(){
@@ -36,9 +38,12 @@ MetalValues.prototype.getMetalUnitPrices =function(){
 }
 
 MetalValues.prototype.getMetalUnitPrice = function(){
-        if (_has(self.metalUnitPrice,metal)):
+        if (_has(self.metalUnitPrice,metal))
             return this.metalUnitPrice[metal]
-        else:
+        else{
             return -1
+        }
 }
+
+module.exports = MetalValues;
 
