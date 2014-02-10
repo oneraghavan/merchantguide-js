@@ -1,4 +1,4 @@
-var _ = require('underscore.js');
+var _ = require('underscore');
 function AnswerQueries(gConversion,mValues){
     this.galacticConversion = gConversion
     this.metalValues = mValues
@@ -7,61 +7,63 @@ function AnswerQueries(gConversion,mValues){
 }
 
 AnswerQueries.prototype.getAnserForQuerylines = function(queryLines){
-    for queryLine in queryLines:
+    var that = this; 
     _.each(queryLines,function(queryLine){
-        this.getAnserForQueryline(queryLine)        
+        that.getAnswerForQueryline(queryLine)        
     })    
 }
 
-AnswerQueries.prototype.getAnserForQueryline=function(queryLine){
-    if (queryLine.find('Credits') > 0){
-        self.getCreditsforgivenMetal(queryLine)
-    }else if(queryLine.find('much') > 0){
-        self.getValueforString(queryLine)
+AnswerQueries.prototype.getAnswerForQueryline=function(queryLine){
+    if (queryLine.indexOf('Credits') > 0){
+        this.getCreditsforgivenMetal(queryLine)
+    }else if(queryLine.indexOf('much') > 0){
+        this.getValueforString(queryLine)
     }else{
-        print self.invalidQuerymessage
+        return this.invalidQuerymessage
     }
 }
 
-AnswerQueries.prototype.getCreditsforgivenMetal = function(){
+AnswerQueries.prototype.getCreditsforgivenMetal = function(queryLine){
     splitlines = queryLine.split(' is ')
     if (splitlines[0] == 'how many Credits'){
         quantiyMetal = splitlines[1].split(' ')
-        quantityValueString = quantiyMetal[:-2]
+        quantityValueString = _.last(quantiyMetal,2);
         metal = quantiyMetal[-2]
-        quantityValue = self.galacticConversion.getValuesfromgalactic(quantityValueString)
-        metalUnitPrice = self.metalValues.getMetalUnitPrice(metal)
-        if (quantityValue == -1 or metalUnitPrice == -1){
-            print self.invalidQuerymessage
+        quantityValue = this.galacticConversion.getValuesFromGalactic(quantityValueString)
+        metalUnitPrice = this.metalValues.getMetalUnitPrice(metal)
+        if (quantityValue == -1 || metalUnitPrice == -1){
+            return this.invalidQuerymessage
         }
         else{
-            print ' '.join(splitlines[1].split(' ')[:-1]) + ' is ' + str(getDecimalremovedCredit(quantityValue*metalUnitPrice)) + ' credits '
+            return ' '.join(_.last(splitlines[1].split(' '),1)) + ' is ' + str(getDecimalremovedCredit(quantityValue*metalUnitPrice)) + ' credits '
         }
     }
     else{
-        print self.invalidQuerymessage     
+        return this.invalidQuerymessage     
     }
 }
 
-AnswerQueries.prototype.getValueforString=function(){
+AnswerQueries.prototype.getValueforString=function(queryLine){
     splitlines = queryLine.split(' is ')
     if (splitlines[0] == 'how much'){
-        quantityValueString = splitlines[1].split(' ')[:-1]
-        quantityValue = self.galacticConversion.getValuesfromgalactic(quantityValueString)
+        quantityValueString = _.last(splitlines[1].split(' '),1);
+        quantityValue = this.galacticConversion.getValuesFromGalactic(quantityValueString)
         if (quantityValue == -1){
-            print self.invalidQuerymessage
+            return this.invalidQuerymessage
         }else{
-            print ' '.join(quantityValueString) + ' is ' + str(getDecimalremovedCredit(quantityValue))
+            return ' '.join(quantityValueString) + ' is ' + str(getDecimalremovedCredit(quantityValue))
         }
     }else{
-        print self.invalidQuerymessage
+        return this.invalidQuerymessage
     }
 }
 
 getDecimalremovedCredit = function(){
-    if (value == parseInt(value){
+    if (value == parseInt(value)){
         return parseInt(value)
     }else{
         return value
     }
 }
+
+module.exports = AnswerQueries;

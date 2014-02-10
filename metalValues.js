@@ -38,7 +38,7 @@ MetalValues.prototype.getMetalUnitPrices =function(){
 }
 
 MetalValues.prototype.getMetalUnitPrice = function(){
-        if (_has(self.metalUnitPrice,metal))
+        if (_.has(this.metalUnitPrice,metal))
             return this.metalUnitPrice[metal]
         else{
             return -1
