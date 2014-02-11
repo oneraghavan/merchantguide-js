@@ -27,38 +27,40 @@ AnswerQueries.prototype.getCreditsforgivenMetal = function(queryLine){
     splitlines = queryLine.split(' is ')
     if (splitlines[0] == 'how many Credits'){
         quantiyMetal = splitlines[1].split(' ')
-        quantityValueString = _.last(quantiyMetal,2);
-        metal = quantiyMetal[-2]
+        quantityValueString = _.first(quantiyMetal,2);
+        metal = _.last(quantiyMetal,2)[0]
         quantityValue = this.galacticConversion.getValuesFromGalactic(quantityValueString)
         metalUnitPrice = this.metalValues.getMetalUnitPrice(metal)
         if (quantityValue == -1 || metalUnitPrice == -1){
-            return this.invalidQuerymessage
+            console.log(this.invalidQuerymessage); 
         }
         else{
-            return ' '.join(_.last(splitlines[1].split(' '),1)) + ' is ' + str(getDecimalremovedCredit(quantityValue*metalUnitPrice)) + ' credits '
+            console.log(_.without(splitlines[1].split(' '),_.last(splitlines[1].split(' '),1)).join(' ') + ' is ' + getDecimalremovedCredit(quantityValue*metalUnitPrice) + ' credits ');
         }
     }
     else{
-        return this.invalidQuerymessage     
+        console.log(this.invalidQuerymessage)     
     }
 }
 
 AnswerQueries.prototype.getValueforString=function(queryLine){
     splitlines = queryLine.split(' is ')
     if (splitlines[0] == 'how much'){
-        quantityValueString = _.last(splitlines[1].split(' '),1);
+
+        valueString = _.without(splitlines,_.last(splitlines[1].split(' '),1)[0])[1];
+        quantityValueString = _.without(valueString.split(' '),'?');
         quantityValue = this.galacticConversion.getValuesFromGalactic(quantityValueString)
         if (quantityValue == -1){
-            return this.invalidQuerymessage
+            console.log( this.invalidQuerymessage)
         }else{
-            return ' '.join(quantityValueString) + ' is ' + str(getDecimalremovedCredit(quantityValue))
+            console.log( quantityValueString.join(' ') + ' is ' + getDecimalremovedCredit(quantityValue))
         }
     }else{
-        return this.invalidQuerymessage
+        console.log( this.invalidQuerymessage)
     }
 }
 
-getDecimalremovedCredit = function(){
+getDecimalremovedCredit = function(value){
     if (value == parseInt(value)){
         return parseInt(value)
     }else{
